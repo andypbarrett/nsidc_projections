@@ -1,8 +1,13 @@
 # NSIDC Projections
 
-A repo containing projection definitions for projections and grids
-used by NSIDC.  Projections classes are defined for `cartopy` and
-`rasterio`.
+A repo containing projection and grid definitions for projections and grids
+used by NSIDC.  Projections and grid definitions are in a Grid class.
+The Grid class has `pyproj.CRS` and `affine.Affine` objects as attributes that
+contain projection and grid definitions.  The Grid class has methods to generate
+cartopy.crs objects, projected coordinates for each grid, and 2D latitude and longitude
+arrays.
+
+__Methods for gdal crs and rasterio srs will be added soon.__
 
 Gridded data hosted by NSIDC are in a number of projections and grids.
 These projections and grids are used widely by the Cryospheric
