@@ -67,14 +67,15 @@ class GPDefinition():
 def make_gpd_path(gpdname):
     """Returns a Path object for gpd"""
     if ".gpd" not in gpdname:
-        fgpd = gpdname + ".gpd"
-    return MAPXMAPS_PATH / fgpd
+        return MAPXMAPS_PATH / (gpdname + ".gpd")
+    else:
+        return MAPXMAPS_PATH / gpdname
 
 
 def make_mpp_path(mpp_name):
     """Returns a Path object to mpp"""
     if ".mpp" not in mpp_name:
-        return MAPXMAPS_PATH / mpp_name + ".mpp"
+        return MAPXMAPS_PATH / (mpp_name + ".mpp")
     else:
         return MAPXMAPS_PATH / mpp_name
 
