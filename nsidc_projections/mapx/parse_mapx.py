@@ -74,8 +74,9 @@ def make_gpd_path(gpdname):
 def make_mpp_path(mpp_name):
     """Returns a Path object to mpp"""
     if ".mpp" not in mpp_name:
-        fmpp = mpp_name + ".mpp"
-    return MAPXMAPS_PATH / fmpp
+        return MAPXMAPS_PATH / mpp_name + ".mpp"
+    else:
+        return MAPXMAPS_PATH / mpp_name
 
 
 def parse_grid_mpp_file(s):
