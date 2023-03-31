@@ -1,0 +1,17 @@
+name: nsidc_projections
+channels:
+ - conda-forge
+ - default
+dependencies:
+ - python ~=3.10
+
+ ###################################################
+ # Imported dependencies and extensions            #
+ ###################################################
+
+ - jupyterlab
+ - matplotlib
+ - cartopy
+ - pyproj
+ - pytest
+ 
