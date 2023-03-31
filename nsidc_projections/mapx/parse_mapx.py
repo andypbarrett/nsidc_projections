@@ -113,7 +113,11 @@ def parse_mpp(mpp_name):
     :returns: a dictionary of projection parameters
     """
     path_to_mpp = make_mpp_path(mpp_name)
-
+    with open(path_to_mpp, "r") as f:
+        lines = f.readlines()
+    fields = {}
+    for line in lines:
+        print(line)
     
 
 def parse_original_gpd(lines):
