@@ -106,6 +106,24 @@ gpd_parser = {
 }
 
 
+def get_mpp_fields(lines):
+    """Returns a dictionary of mpp parameters from each line"""
+    these_fields = ['lat0 lon0', 'lat0 lon0 lat1', 'rotation', 'scale (km/map unit)',
+                    'Earth equatorial radius (km) -- wgs84', 'eccentricity -- wgs84',
+                    'Earth equatorial radius (km)', 'eccentricity']
+    def as_pair(line):
+        arr = re.split("\t+", line.strip())
+        return (" ".join(arr[:-1]), arr[-1].split(' -- ')[0])
+    
+#    params = list(filter(lambda item: item is not None, [as_pair(line) for line in lines]))
+    fields = {}
+    for line in lines:
+        value, key = as_pair(line)
+        if key in these_fields:
+            fields.update({key: value})
+    return fields
+
+
 def parse_mpp(mpp_name):
     """Parses a mpp definition file
 
@@ -117,9 +135,10 @@ def parse_mpp(mpp_name):
     with open(path_to_mpp, "r") as f:
         lines = f.readlines()
     fields = {}
-    for line in lines:
-        print(line)
-    
+    fields["Map Projection"] = lines[0].strip()
+    fields.update(get_mpp_fields(lines))
+    return fields
+
 
 def parse_original_gpd(lines):
     """Parses an original-style gpd file"""
