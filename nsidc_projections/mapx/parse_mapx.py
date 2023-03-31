@@ -106,21 +106,60 @@ gpd_parser = {
 }
 
 
+def parse_lat0_lon0(s):
+    keys = ["Latitude of Origin", "Longitude of Origin"]
+    return {k: float(v) for k, v in zip(keys, s.split())}
+
+
+def parse_lat0_lon0_lat1(s):
+    keys = ["Latitude of Origin", "Longitude of Origin", "Latitude of True Scale"]
+    return {k: float(v) for k, v in zip(keys, s.split())}
+
+
+def parse_rotation(s):
+    return {"Rotation": float(s)}
+
+
+def parse_scale(s):
+    return {"Scale km per map unit": float(s)}
+
+
+def parse_earth_radius(s):
+    return {"Map Equatorial Radius": float(s)}
+
+
+def parse_eccentricity(s):
+    return {"Eccentricity": float(s)}
+
+
+mpp_parser = {
+    "lat0 lon0": parse_lat0_lon0,
+    "lat0 lon0 lat1": parse_lat0_lon0_lat1,
+    "rotation": parse_rotation,
+    "scale (km/map unit)": parse_scale,
+    "Earth equatorial radius (km)": parse_earth_radius,
+    "eccentricity": parse_eccentricity,
+    }
+
+
 def get_mpp_fields(lines):
     """Returns a dictionary of mpp parameters from each line"""
     these_fields = ['lat0 lon0', 'lat0 lon0 lat1', 'rotation', 'scale (km/map unit)',
                     'Earth equatorial radius (km) -- wgs84', 'eccentricity -- wgs84',
                     'Earth equatorial radius (km)', 'eccentricity']
+
     def as_pair(line):
+        """Create key value tuple"""
         arr = re.split("\t+", line.strip())
-        return (" ".join(arr[:-1]), arr[-1].split(' -- ')[0])
+        key = arr[-1].split(' -- ')[0]
+        value = " ".join([s.strip() for s in arr[:-1] if s.strip() != ""])
+        return (key, value)
     
-#    params = list(filter(lambda item: item is not None, [as_pair(line) for line in lines]))
     fields = {}
     for line in lines:
-        value, key = as_pair(line)
+        key, value = as_pair(line)
         if key in these_fields:
-            fields.update({key: value})
+            fields.update(mpp_parser[key](value))
     return fields
 
 
