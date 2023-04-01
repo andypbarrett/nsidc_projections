@@ -174,7 +174,7 @@ def parse_mpp(mpp_name):
     with open(path_to_mpp, "r") as f:
         lines = f.readlines()
     fields = {}
-    fields["Map Projection"] = lines[0].strip()
+    fields["Map Projection"] = lines[0].strip().title()
     fields.update(get_mpp_fields(lines))
     return fields
 
