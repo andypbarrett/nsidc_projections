@@ -107,17 +107,17 @@ gpd_parser = {
 
 
 def parse_lat0_lon0(s):
-    keys = ["Latitude of Origin", "Longitude of Origin"]
+    keys = ["Map Reference Latitude", "Map Reference Longitude"]
     return {k: float(v) for k, v in zip(keys, s.split())}
 
 
 def parse_lat0_lon0_lat1(s):
-    keys = ["Latitude of Origin", "Longitude of Origin", "Latitude of True Scale"]
+    keys = ["Map Reference Latitude", "Map Reference Longitude", "Map Latitude True Scale"]
     return {k: float(v) for k, v in zip(keys, s.split())}
 
 
 def parse_rotation(s):
-    return {"Rotation": float(s)}
+    return {"Map Rotation": float(s)}
 
 
 def parse_scale(s):
@@ -129,7 +129,7 @@ def parse_earth_radius(s):
 
 
 def parse_eccentricity(s):
-    return {"Eccentricity": float(s)}
+    return {"Map Eccentricity": float(s)}
 
 
 mpp_parser = {
