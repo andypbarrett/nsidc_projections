@@ -201,5 +201,7 @@ def parse_gpd(gpdname):
         lines = f.readlines()
     if 'map projection parameters' in lines[0]:
         result = parse_original_gpd(lines)
+    else:
+        raise NotImplementedError("Parser for new format gpd coming soon!")
     return result
 
