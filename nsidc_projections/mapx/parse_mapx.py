@@ -7,6 +7,9 @@ import pyproj
 import cartopy.crs as ccrs
 
 from nsidc_projections.filepath import MAPXMAPS_PATH
+from nsidc_projections.mapx.constants import (MAP_EQUATORIAL_RADIUS,
+                                              Expected_Missing_Radius,
+                                              km2m)
 
 
 class GPDefinition():
@@ -125,7 +128,7 @@ def parse_scale(s):
 
 
 def parse_earth_radius(s):
-    return {"Map Equatorial Radius": float(s)}
+    return {"Map Equatorial Radius": float(s)*km2m}
 
 
 def parse_eccentricity(s):
@@ -189,7 +192,39 @@ def parse_original_gpd(lines):
     return fields
 
 
-def parse_gpd(gpdname):
+def get_equatorial_radius(result):
+    """Returns missing equatorial radius for projection
+
+    !!!This should only be for original EASE-Grid!!!
+    """
+    if result["Map Projection"] not in Expected_Missing_Radius:
+        raise KeyError(f"Unexpected projection {result['Map Projection']} for missing radius")
+    result["Map Equatorial Radius"] = MAP_EQUATORIAL_RADIUS[result["Map Projection"]]
+
+
+def calc_missing_parameters(result):
+    """Calculates or fills in missing parameters"""
+    if "Map Equatorial Radius" not in result:
+        get_equatorial_radius(result)
+    return result
+
+
+def calc_map_origin_x(result):
+    """Calculates the Map Origin of the x-axis"""
+    return -1 * result["Grid Map Units per Cell"] * km2m * result["Grid Map Origin Column"]
+
+
+def calc_map_origin_y(result):
+    """Calculates the Map Origin of the y-axis"""
+    return result["Grid Map Units per Cell"] * km2m * result["Grid Map Origin Row"]
+
+
+def calc_grid_map_units_per_cell(result):
+    """Calculate the grid cell size - expected in meters"""
+    return result["Scale km per map unit"] * km2m / result["Grid Cells per Map Unit"]
+
+
+def get_grid_definition(gpdname):
     """Parses a gpd definition file
 
     :path_to_gpd: str or Path object to gpd file
@@ -201,6 +236,7 @@ def parse_gpd(gpdname):
         lines = f.readlines()
     if 'map projection parameters' in lines[0]:
         result = parse_original_gpd(lines)
+        result = calc_missing_parameters(result)
     else:
         raise NotImplementedError("Parser for new format gpd coming soon!")
     return result
