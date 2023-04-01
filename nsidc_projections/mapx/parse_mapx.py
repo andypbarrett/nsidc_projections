@@ -47,7 +47,7 @@ class GPDefinition():
 
     def from_gpd(self, gpd_name):
         """Initializes from a gpd file"""
-        result = parse_gpd(gpd_name)
+        result = get_grid_definition(gpd_name)
         self.map_projection = result.get('Map Projection', None)
         self.map_reference_latitude = result.get('Map Reference Latitude', np.nan)
         self.map_reference_longitude = result.get('Map Reference Longitude', np.nan)
