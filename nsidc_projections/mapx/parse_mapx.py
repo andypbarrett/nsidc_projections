@@ -185,6 +185,7 @@ def parse_original_gpd(lines):
     for line in lines:
         value, key = re.split("\t+", line.strip())[:2]
         fields.update(gpd_parser[key](value))
+    fields.update(parse_mpp(fields["Grid MPP File"]))
     return fields
 
 
