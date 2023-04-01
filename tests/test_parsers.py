@@ -2,42 +2,91 @@
 
 import pytest
 
-from nsidc_projections.mapx.parse_mapx import parse_gpd, make_gpd_path, make_mpp_path, parse_mpp
+import nsidc_projections.mapx.parse_mapx as mapx
+
+# Test Cases for MPP parsing
+MPP_CASE = [
+    ("N200correct", {
+        "Map Projection": "Azimuthal Equal-Area",
+        "Map Reference Latitude": 90.0,
+        "Map Reference Longitude": 0.0,
+        "Map Rotation": 0.0,
+        "Scale km per map unit": 200.5402,
+        }
+    ),
+    ("Sps.mpp", {
+        "Map Projection": "Polar Stereographic Ellipsoid",
+        "Map Reference Latitude": -90.0,
+        "Map Reference Longitude": 0.0,
+        "Map Latitude True Scale": -70.0,
+        "Map Rotation": 0.0,
+        "Scale km per map unit": 100.,
+        "Map Equatorial Radius": 6378.273,
+        "Map Eccentricity": 0.081816153,
+        }
+    ),
+    ("ramp.mpp", {
+        "Map Projection": "Polar Stereographic Ellipsoid",
+        "Map Reference Latitude": -90.0,
+        "Map Reference Longitude": 0.0,
+        "Map Latitude True Scale": -71.0,
+        "Map Rotation": 0.0,
+        "Scale km per map unit": 100.,
+        "Map Equatorial Radius": 6378.137,
+        "Map Eccentricity": 0.081819190843,
+        }
+    ),
+    ]
 
 
-def test_make_gpd_path():
-    gpdname = "Nl"
-    target = "/home/apbarret/src/mapxmaps/Nl.gpd"
-    result = make_gpd_path(gpdname)
-    assert target == str(result)
-
-
-def test_make_mpp_path():
-    mpp_name = "N200correct.mpp"
-    target = "/home/apbarret/src/mapxmaps/N200correct.mpp"
-    result = make_mpp_path(mpp_name)
-    assert target == str(result)
-
-
-def test_parse_gpd():
-    gpdname = "Nl"
-    target = {
+GPD_CASE = [
+    ("Nl", {
+        **MPP_CASE[0][1],
         'Grid MPP File': 'N200correct.mpp',
         'Grid Width': 721,
         'Grid Height': 721,
         'Grid Cells per Map Unit': 8.,
         'Grid Map Origin Column': 360.0,
         'Grid Map Origin Row': 360.0,
+        'Map Equatorial Radius': 6371228,
     }
-    result = parse_gpd(gpdname)
-    assert result == target
+    ),
+    ]
+def test_make_gpd_path():
+    gpdname = "Nl"
+    target = "/home/apbarret/src/mapxmaps/Nl.gpd"
+    result = mapx.make_gpd_path(gpdname)
+    assert target == str(result)
+
+
+def test_make_mpp_path():
+    mpp_name = "N200correct.mpp"
+    target = "/home/apbarret/src/mapxmaps/N200correct.mpp"
+    result = mapx.make_mpp_path(mpp_name)
+    assert target == str(result)
 
 
 @pytest.mark.parametrize(
-    "case",
-    ["N200correct", "Sps.mpp", "ramp.mpp"]
+    "case,expected",
+    GPD_CASE
 )
-def test_parse_mpp(case):
+def test_parse_gpd(case, expected):
+    gpdname = case
+    result = mapx.get_grid_definition(gpdname)
+    assert result == expected
+
+
+@pytest.mark.parametrize(
+    "case,expected",
+    MPP_CASE
+)
+def test_parse_mpp(case, expected):
     mpp_name = case
-    result = parse_mpp(mpp_name)
-    print(result)
+    result = mapx.parse_mpp(mpp_name)
+    assert result == expected
+    #print(result)
+    #print(expected)
+
+
+def test_calc_grid_map_units_per_cell(case, expected):
+    """Use Nl.gpd and Sl.gpd as test cases"""
