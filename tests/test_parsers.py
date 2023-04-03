@@ -123,3 +123,13 @@ def test_calc_map_origin_x():
     expected = -9030574.08
     result = mapx.calc_map_origin_x(test)
     assert expected == result
+
+
+def test_calc_map_origin_y():
+    test ={
+        "Grid Map Units per Cell": 12533.76,
+        "Grid Map Origin Row": 720.0,
+        }
+    expected = 9030574.08
+    result = mapx.calc_map_origin_y(test)
+    assert expected == result
