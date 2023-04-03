@@ -229,9 +229,10 @@ def calc_map_origin_y(result):
     return result["Grid Map Units per Cell"] * (result["Grid Map Origin Row"] + 0.5)
 
 
-def calc_grid_map_units_per_cell(result):
+def calc_grid_map_units_per_cell(params):
     """Calculate the grid cell size - expected in meters"""
-    return result["Scale km per map unit"] * km2m / result["Grid Cells per Map Unit"]
+    map_units_per_cell = params["Scale km per map unit"] * km2m / params["Grid Cells per Map Unit"]
+    return np.round(map_units_per_cell, 2)
 
 
 def get_grid_definition(gpdname):
