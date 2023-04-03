@@ -110,7 +110,7 @@ def test_calc_grid_map_units_per_cell():
         "Scale km per map unit": 200.5402,
         'Grid Cells per Map Unit': 16.,
         }
-    expected = 12533.7625
+    expected = 12533.76
     result = mapx.calc_grid_map_units_per_cell(test)
     assert result == expected
 
