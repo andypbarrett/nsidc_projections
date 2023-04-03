@@ -210,13 +210,23 @@ def calc_missing_parameters(result):
 
 
 def calc_map_origin_x(result):
-    """Calculates the Map Origin of the x-axis"""
-    return -1 * result["Grid Map Units per Cell"] * km2m * result["Grid Map Origin Column"]
+    """Calculates the Map Origin of the x-axis
+    
+    Add 0.5 t0 column
+
+    See https://nsidc.org/data/user-resources/help-center/mapping-and-gridding-primer-points-pixels-grids-and-cells#anchor-1 for discussion of column, row coords
+    """
+    return -1 * result["Grid Map Units per Cell"] * (result["Grid Map Origin Column"] + 0.5)
 
 
 def calc_map_origin_y(result):
-    """Calculates the Map Origin of the y-axis"""
-    return result["Grid Map Units per Cell"] * km2m * result["Grid Map Origin Row"]
+    """Calculates the Map Origin of the y-axis
+    
+    Add 0.5 t0 row
+
+    See https://nsidc.org/data/user-resources/help-center/mapping-and-gridding-primer-points-pixels-grids-and-cells#anchor-1 for discussion of column, row coords
+    """
+    return result["Grid Map Units per Cell"] * (result["Grid Map Origin Row"] + 0.5)
 
 
 def calc_grid_map_units_per_cell(result):
