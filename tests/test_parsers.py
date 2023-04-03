@@ -21,7 +21,7 @@ MPP_CASE = [
         "Map Latitude True Scale": -70.0,
         "Map Rotation": 0.0,
         "Scale km per map unit": 100.,
-        "Map Equatorial Radius": 6378.273,
+        "Map Equatorial Radius": 6378273.,
         "Map Eccentricity": 0.081816153,
         }
     ),
@@ -32,7 +32,7 @@ MPP_CASE = [
         "Map Latitude True Scale": -71.0,
         "Map Rotation": 0.0,
         "Scale km per map unit": 100.,
-        "Map Equatorial Radius": 6378.137,
+        "Map Equatorial Radius": 6378137.,
         "Map Eccentricity": 0.081819190843,
         }
     ),
@@ -51,7 +51,23 @@ GPD_CASE = [
         'Map Equatorial Radius': 6371228,
     }
     ),
+    ("Nh", {
+        **MPP_CASE[0][1],
+        'Grid MPP File': 'N200correct.mpp',
+        'Grid Width': 1441,
+        'Grid Height': 1441,
+        'Grid Cells per Map Unit': 16.,
+        'Grid Map Origin Column': 720.0,
+        'Grid Map Origin Row': 720.0,
+        'Map Equatorial Radius': 6371228,
+    #     'Map Origin X': -9030574.08,
+    #     'Map Origin Y': 9030574.08,
+    #     'Grid Map Units per Cell': 12533.76,
+    },
+    )
     ]
+
+
 def test_make_gpd_path():
     gpdname = "Nl"
     target = "/home/apbarret/src/mapxmaps/Nl.gpd"
@@ -88,5 +104,22 @@ def test_parse_mpp(case, expected):
     #print(expected)
 
 
-def test_calc_grid_map_units_per_cell(case, expected):
+def test_calc_grid_map_units_per_cell():
     """Use Nl.gpd and Sl.gpd as test cases"""
+    test = {
+        "Scale km per map unit": 200.5402,
+        'Grid Cells per Map Unit': 16.,
+        }
+    expected = 12533.7625
+    result = mapx.calc_grid_map_units_per_cell(test)
+    assert result == expected
+
+
+def test_calc_map_origin_x():
+    test ={
+        "Grid Map Units per Cell": 12533.76,
+        "Grid Map Origin Column": 720.0,
+        }
+    expected = -9030574.08
+    result = mapx.calc_map_origin_x(test)
+    assert expected == result
