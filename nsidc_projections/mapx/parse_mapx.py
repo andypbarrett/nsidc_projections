@@ -50,20 +50,20 @@ class GPDefinition():
 
     def from_gpd(self, gpd_name):
         """Initializes from a gpd file"""
-        result = get_grid_definition(gpd_name)
-        self.map_projection = result.get('Map Projection', None)
-        self.map_reference_latitude = result.get('Map Reference Latitude', np.nan)
-        self.map_reference_longitude = result.get('Map Reference Longitude', np.nan)
-        self.map_rotation = result.get('Map Rotation', np.nan)
-        self.map_equatorial_radius = result.get('Map Equatorial Radius', np.nan)
-        self.map_eccentricity = result.get('Map Eccentricity', np.nan)
-        self.map_origin_x = result.get('Map Origin X', np.nan)
-        self.map_origin_y = result.get('Map Origin Y', np.nan)
-        self.grid_map_origin_column = result.get('Grid Map Origin Column', np.nan)
-        self.grid_map_origin_row = result.get('Grid Map Origin Row', np.nan)
-        self.grid_map_units_per_cell = result.get('Grid Map Units per Cell', np.nan)
-        self.grid_width = result.get('Grid Width', 0)
-        self.grid_height = result.get('Grid Height', 0)
+        params = get_grid_definition(gpd_name)
+        self.map_projection = params.get('Map Projection', None)
+        self.map_reference_latitude = params.get('Map Reference Latitude', np.nan)
+        self.map_reference_longitude = params.get('Map Reference Longitude', np.nan)
+        self.map_rotation = params.get('Map Rotation', np.nan)
+        self.map_equatorial_radius = params.get('Map Equatorial Radius', np.nan)
+        self.map_eccentricity = params.get('Map Eccentricity', np.nan)
+        self.map_origin_x = params.get('Map Origin X', np.nan)
+        self.map_origin_y = params.get('Map Origin Y', np.nan)
+        self.grid_map_origin_column = params.get('Grid Map Origin Column', np.nan)
+        self.grid_map_origin_row = params.get('Grid Map Origin Row', np.nan)
+        self.grid_map_units_per_cell = params.get('Grid Map Units per Cell', np.nan)
+        self.grid_width = params.get('Grid Width', 0)
+        self.grid_height = params.get('Grid Height', 0)
         
 
 
@@ -192,41 +192,41 @@ def parse_original_gpd(lines):
     return fields
 
 
-def get_equatorial_radius(result):
+def get_equatorial_radius(params):
     """Returns missing equatorial radius for projection
 
     !!!This should only be for original EASE-Grid!!!
     """
-    if result["Map Projection"] not in Expected_Missing_Radius:
-        raise KeyError(f"Unexpected projection {result['Map Projection']} for missing radius")
-    result["Map Equatorial Radius"] = MAP_EQUATORIAL_RADIUS[result["Map Projection"]]
+    if params["Map Projection"] not in Expected_Missing_Radius:
+        raise KeyError(f"Unexpected projection {params['Map Projection']} for missing radius")
+    params["Map Equatorial Radius"] = MAP_EQUATORIAL_RADIUS[params["Map Projection"]]
 
 
-def calc_missing_parameters(result):
+def calc_missing_parameters(params):
     """Calculates or fills in missing parameters"""
-    if "Map Equatorial Radius" not in result:
-        get_equatorial_radius(result)
-    return result
+    if "Map Equatorial Radius" not in params:
+        get_equatorial_radius(params)
+    return params
 
 
-def calc_map_origin_x(result):
+def calc_map_origin_x(params):
     """Calculates the Map Origin of the x-axis
     
     Add 0.5 t0 column
 
     See https://nsidc.org/data/user-resources/help-center/mapping-and-gridding-primer-points-pixels-grids-and-cells#anchor-1 for discussion of column, row coords
     """
-    return -1 * result["Grid Map Units per Cell"] * (result["Grid Map Origin Column"] + 0.5)
+    return -1 * params["Grid Map Units per Cell"] * (params["Grid Map Origin Column"] + 0.5)
 
 
-def calc_map_origin_y(result):
+def calc_map_origin_y(params):
     """Calculates the Map Origin of the y-axis
     
     Add 0.5 t0 row
 
     See https://nsidc.org/data/user-resources/help-center/mapping-and-gridding-primer-points-pixels-grids-and-cells#anchor-1 for discussion of column, row coords
     """
-    return result["Grid Map Units per Cell"] * (result["Grid Map Origin Row"] + 0.5)
+    return params["Grid Map Units per Cell"] * (params["Grid Map Origin Row"] + 0.5)
 
 
 def calc_grid_map_units_per_cell(params):
@@ -246,9 +246,9 @@ def get_grid_definition(gpdname):
     with open(path_to_gpd, "r") as f:
         lines = f.readlines()
     if 'map projection parameters' in lines[0]:
-        result = parse_original_gpd(lines)
-        result = calc_missing_parameters(result)
+        params = parse_original_gpd(lines)
+        params = calc_missing_parameters(params)
     else:
         raise NotImplementedError("Parser for new format gpd coming soon!")
-    return result
+    return params
 
