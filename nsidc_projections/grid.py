@@ -6,7 +6,7 @@ from pyproj import CRS, Transformer
 from affine import Affine
 import cartopy.crs as ccrs
 
-import grid_info
+from nsidc_projections import grid_info
 
 # Need to add cylindrical projection
 keymap_projclass = {
