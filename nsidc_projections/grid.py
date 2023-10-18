@@ -1,4 +1,5 @@
 """Classes for NSIDC Grids"""
+import sys
 
 import numpy as np
 
@@ -7,6 +8,11 @@ from affine import Affine
 import cartopy.crs as ccrs
 
 from nsidc_projections import grid_info
+
+if not sys.warnoptions:
+    import warnings
+    warnings.simplefilter("ignore")
+
 
 # Need to add cylindrical projection
 keymap_projclass = {
@@ -132,6 +138,22 @@ class Grid:
     def to_cartopy(self):
         return to_cartopy(self.crs)
 
-    
+    def grid_bounds(self, xy=False):
+        grid_corners = [(0,0), (self.cols, 0), (self.cols, self.rows), (0, self.rows)]
+        grid_corners_m = [self.geotransform() * corner for corner in grid_corners]
+        if xy:
+            x, y = list(zip(*grid_corners_m))
+            return list(x), list(y)
+        return grid_corners_m
+
+    def x_limits(self):
+        x, _ = self.grid_bounds(xy=True)
+        return min(x), max(x)
+
+    def y_limits(self):
+        _, y = self.grid_bounds(xy=True)
+        return min(y), max(y)
+
+
 EASEGridNorth25km = Grid(grid_info.EASEGridNorth25km)
 SSMI_PolarStereoNorth25km = Grid(grid_info.SSMI_PolarStereoNorth25km)
