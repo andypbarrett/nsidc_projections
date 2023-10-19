@@ -1,5 +1,4 @@
 """Contains projection and grid constants"""
-
 from collections import namedtuple
 
 Grid = namedtuple(
@@ -15,6 +14,15 @@ Grid = namedtuple(
         "upper_left_y"
         ]
 )
+
+# Original EASE Grid grid cell width and height are
+# fraction of equatorial radius set to span equator with
+# whole number of cells (Brodzik et al, 2012).  
+EASE_GRID_MAP_SCALE = 200.5402e3  # km/map unit - N200correct.mpp
+EASE_GRID_CELLS_PER_MAP_UNIT = 8  # For 25 km grid - Nl.gpd
+EASE_GRID25_WIDTH = EASE_GRID_MAP_SCALE / EASE_GRID_CELLS_PER_MAP_UNIT
+EASE_GRID25_HEIGHT = -1. * EASE_GRID_MAP_SCALE / EASE_GRID_CELLS_PER_MAP_UNIT
+
 
 EASE_GRID_NORTH_EPSG = 3408
 EASE_GRID_SOUTH_EPSG = 3409
@@ -32,8 +40,8 @@ EASEGridNorth25km = Grid(
     epsg=EASE_GRID_NORTH_EPSG,
     cols=721,
     rows=721,
-    cell_width=25067.53,
-    cell_height=25067.53,
+    cell_width=EASE_GRID25_WIDTH,
+    cell_height=EASE_GRID25_HEIGHT,
     upper_left_x=-9036842.76,
     upper_left_y=9036842.76
     )
@@ -43,8 +51,8 @@ EASEGridSouth25km = Grid(
     epsg=EASE_GRID_SOUTH_EPSG,
     cols=721,
     rows=721,
-    cell_width=25067.53,
-    cell_height=25067.53,
+    cell_width=EASE_GRID25_WIDTH,
+    cell_height=EASE_GRID25_HEIGHT,
     upper_left_x=-9036842.76,
     upper_left_y=9036842.76
     )
@@ -54,8 +62,8 @@ EASEGridGlobal25km = Grid(
     epsg=EASE_GRID_GLOBAL_EPSG,
     cols=1383,
     rows=586,
-    cell_width=25067.53,
-    cell_height=25067.53,
+    cell_width=EASE_GRID25_WIDTH,
+    cell_height=EASE_GRID25_HEIGHT,
     upper_left_x=-17334193.54,
     upper_left_y=7344784.83
     )
@@ -98,8 +106,8 @@ AVHRR_EASEGridNorth25km = Grid(
     epsg=EASE_GRID_NORTH_EPSG,
     cols=361,
     rows=361,
-    cell_width=25067.5,
-    cell_height=25067.5,
+    cell_width=EASE_GRID25_WIDTH,
+    cell_height=EASE_GRID25_HEIGHT,
     upper_left_x=-4524683.8,
     upper_left_y=4524683.8
     )
@@ -109,8 +117,8 @@ AVHRR_EASEGridSouth25km = Grid(
     epsg=EASE_GRID_SOUTH_EPSG,
     cols=321,
     rows=321,
-    cell_width=25067.5,
-    cell_height=25067.5,
+    cell_width=EASE_GRID25_WIDTH,
+    cell_height=EASE_GRID25_HEIGHT,
     upper_left_x=-4023333.8,
     upper_left_y=4023333.8
     )
