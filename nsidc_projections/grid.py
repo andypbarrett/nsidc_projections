@@ -126,6 +126,13 @@ class Grid:
         return x, y
 
 
+    def get_gridcell_edges(self):
+        c = np.arange(0., self.cols+1, 1.)
+        r = np.arange(0., self.rows+1, 1.)
+        x, y = self.geotransform() * (c, r)
+        return x, y
+
+    
     def get_latlon(self):
         """Return 2D grids of latitude and longitudes"""
         x, y = self.get_coordinates()
