@@ -13,5 +13,6 @@ dependencies:
  - matplotlib
  - cartopy
  - pyproj
+ - affine
  - pytest
  

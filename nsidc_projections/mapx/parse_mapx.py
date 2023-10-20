@@ -29,23 +29,27 @@ class GPDefinition():
         self.grid_map_units_per_cell = np.nan  # meters
         self.grid_width = 0
         self.grid_height = 0
+        self.cell_width = 0  # meters
+        self.cell_height = 0  # meters
 
 
     def __str__(self):
         return (f"Map Projection:                     {self.map_projection}\n"
-                f"Map Reference Latitude:             {self.map_reference_latitude:5.1f}\n"
-                f"Map Reference Longitude:            {self.map_reference_longitude:5.1f}\n"
-                f"Map Latitude True Scale:            {self.map_latitude_true_scale:5.1f}\n"
+                f"Map Reference Latitude:             {self.map_reference_latitude:5.1f} degrees\n"
+                f"Map Reference Longitude:            {self.map_reference_longitude:5.1f} degrees\n"
+                f"Map Latitude True Scale:            {self.map_latitude_true_scale:5.1f} degrees\n"
                 f"Map Rotation:                       {self.map_rotation:6.1f}\n"
-                f"Map Equatorial Radius:              {self.map_equatorial_radius:9.1f}\n"
+                f"Map Equatorial Radius:              {self.map_equatorial_radius:9.1f} meters\n"
                 f"Map Eccentricity:                   {self.map_eccentricity:14.12f}\n"
-                f"Map Origin X:                       {self.map_origin_x:12.1f} ; meters\n"
-                f"Map Origin Y:                       {self.map_origin_y:12.1f} ; meters\n"
+                f"Map Origin X:                       {self.map_origin_x:12.1f} meters\n"
+                f"Map Origin Y:                       {self.map_origin_y:12.1f} meters\n"
                 f"Grid Map Origin Column:             {self.grid_map_origin_column:8.3f}\n"
                 f"Grid Map Origin Row:                {self.grid_map_origin_row:8.3f}\n"
-                f"Grid Map Units per Cell:            {self.grid_map_units_per_cell:9.2f} ; meters\n"
+                f"Grid Map Units per Cell:            {self.grid_map_units_per_cell:9.2f} meters\n"
                 f"Grid Width:                         {self.grid_width:5d}\n"
-                f"Grid Height:                        {self.grid_height:5d}\n")
+                f"Grid Height:                        {self.grid_height:5d}\n"
+                f"Cell Width:                         {self.cell_width:10.3f} meters\n"
+                f"Cell Height:                        {self.cell_height:10.3f} meters\n")
 
 
     def from_gpd(self, gpd_name):
@@ -61,11 +65,12 @@ class GPDefinition():
         self.map_origin_y = params.get('Map Origin Y', np.nan)
         self.grid_map_origin_column = params.get('Grid Map Origin Column', np.nan)
         self.grid_map_origin_row = params.get('Grid Map Origin Row', np.nan)
-        self.grid_map_units_per_cell = params.get('Grid Map Units per Cell', np.nan)
+        self.grid_map_units_per_cell = params.get('Grid Cells per Map Unit', np.nan)
         self.grid_width = params.get('Grid Width', 0)
         self.grid_height = params.get('Grid Height', 0)
+        self.cell_width = params.get('Cell Width', 0)
+        self.cell_height = params.get('Cell Height', 0)
         
-
 
 def make_gpd_path(gpdname):
     """Returns a Path object for gpd"""
@@ -206,6 +211,16 @@ def calc_missing_parameters(params):
     """Calculates or fills in missing parameters"""
     if "Map Equatorial Radius" not in params:
         get_equatorial_radius(params)
+    if "Map Units per Cell" not in params:
+        params["Map Units per Cell"] = calc_grid_map_units_per_cell(params)
+    if "Cell Width" not in params:
+        params["Cell Width"] = params["Map Units per Cell"]
+    if "Cell Height" not in params:
+        params["Cell Height"] = -1. * params["Map Units per Cell"]
+    if "Map Origin X" not in params:
+        params["Map Origin X"] = calc_map_origin_x(params)
+    if "Map Origin Y" not in params:
+        params["Map Origin Y"] = calc_map_origin_y(params)
     return params
 
 
@@ -216,7 +231,7 @@ def calc_map_origin_x(params):
 
     See https://nsidc.org/data/user-resources/help-center/mapping-and-gridding-primer-points-pixels-grids-and-cells#anchor-1 for discussion of column, row coords
     """
-    return -1 * params["Grid Map Units per Cell"] * (params["Grid Map Origin Column"] + 0.5)
+    return -1 * params["Map Units per Cell"] * (params["Grid Map Origin Column"] + 0.5)
 
 
 def calc_map_origin_y(params):
@@ -226,13 +241,13 @@ def calc_map_origin_y(params):
 
     See https://nsidc.org/data/user-resources/help-center/mapping-and-gridding-primer-points-pixels-grids-and-cells#anchor-1 for discussion of column, row coords
     """
-    return params["Grid Map Units per Cell"] * (params["Grid Map Origin Row"] + 0.5)
+    return params["Map Units per Cell"] * (params["Grid Map Origin Row"] + 0.5)
 
 
 def calc_grid_map_units_per_cell(params):
     """Calculate the grid cell size - expected in meters"""
     map_units_per_cell = params["Scale km per map unit"] * km2m / params["Grid Cells per Map Unit"]
-    return np.round(map_units_per_cell, 2)
+    return map_units_per_cell
 
 
 def get_grid_definition(gpdname):
