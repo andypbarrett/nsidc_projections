@@ -16,6 +16,7 @@ if not sys.warnoptions:
 
 # Need to add cylindrical projection
 keymap_projclass = {
+#    'cea': ccrs.LambertCylindrical,
     'laea': ccrs.LambertAzimuthalEqualArea,
     'stere': ccrs.Stereographic,
     }
@@ -65,7 +66,7 @@ def get_cartopy_projclass(proj_name):
         cartopy_projclass = keymap_projclass[proj_name]
         return cartopy_projclass
     except KeyError:
-        print(f"{proj_name} is not available")
+        raise NotImplementedError(f"{proj_name} is not available")
 
 
 def to_cartopy(proj_crs):
