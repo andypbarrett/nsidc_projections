@@ -76,7 +76,7 @@ EASEGrid2Global25km = Grid(
     cols=1388,
     rows=584,
     cell_width=25025.26,
-    cell_height=25025.26,
+    cell_height=-25025.26,
     upper_left_x=-17367530.45,
     upper_left_y=7307375.92
     )
@@ -87,7 +87,7 @@ EASEGrid2North25km = Grid(
     cols=720,
     rows=720,
     cell_width=25000.,
-    cell_height=25000.,
+    cell_height=-25000.,
     upper_left_x=-9000000.0,
     upper_left_y=9000000.0
     )
@@ -98,7 +98,7 @@ EASEGrid2South25km = Grid(
     cols=720,
     rows=720,
     cell_width=25000.,
-    cell_height=25000.,
+    cell_height=-25000.,
     upper_left_x=-9000000.0,
     upper_left_y=9000000.0
     )
