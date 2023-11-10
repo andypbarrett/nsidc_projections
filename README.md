@@ -58,4 +58,109 @@ https://nsidc.org/support/how/Points-Pixels-Grids-and-Cells-A-Mapping-and-Griddi
 | WGS84 Polar Stereographic North | WGS84 | 3413 | Stereographic | +proj=stere +lat_0=90 +lat_ts=70 +lon_0=-45 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs |
 | WGS84 Polar Stereographic South | WGS84 | 3976 | Stereographic | +proj=stere +lat_0=90 +lat_ts=70 +lon_0=-45 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs |
 
+## Getting Started
+
+To import a grid definition
+```
+from nsidc_projections.grid import EASEGrid2North25km
+```
+A grid definition can be printed
+```
+print(EASEGrid2North25km)
+```
+```
+Grid object
+name: EASE-Grid 2.0 North 25 km
+EPSG: 6931
+rows: 720
+cols: 720
+cell width: 25000.0
+cell height: -25000.0
+upper-left x: -9000000.0
+upper-left y: 9000000.0
+```
+The Coordinate Reference System can be seen with
+```
+EASEGrid2North25km.crs
+```
+```
+<Projected CRS: EPSG:6931>
+Name: WGS 84 / NSIDC EASE-Grid 2.0 North
+Axis Info [cartesian]:
+- X[south]: Easting (metre)
+- Y[south]: Northing (metre)
+Area of Use:
+- name: Northern hemisphere.
+- bounds: (-180.0, 0.0, 180.0, 90.0)
+Coordinate Operation:
+- name: US NSIDC EASE-Grid 2.0 North
+- method: Lambert Azimuthal Equal Area
+Datum: World Geodetic System 1984 ensemble
+- Ellipsoid: WGS 84
+- Prime Meridian: Greenwich
+```
+This is a proj CRS class, so has all the methods including `to_wkt`, `to_proj4`, `to_dict`.
+
+A CF-compliant SRS definition can also be generated with `to_cf`.
+
+A cartopy CRS can also be generated
+```
+EASEGrid2North25km.to_cartopy()
+```
+```
+<Projected CRS: +proj=laea +datum=WGS84 +lon_0=0 +lat_0=90 +x_0=0  ...>
+Name: unknown
+Axis Info [cartesian]:
+- E[south]: Easting (metre)
+- N[south]: Northing (metre)
+Area of Use:
+- undefined
+Coordinate Operation:
+- name: unknown
+- method: Lambert Azimuthal Equal Area
+Datum: World Geodetic System 1984
+- Ellipsoid: WGS 84
+- Prime Meridian: Greenwich
+```
+In a Jupyter notebook, this produces a thumbnail of the map projection.
+_`cartopy.epsg(epsg_code)` is also available but the map extent for azimuthal projections is not handled correctly.  The `to_cartopy` method in `nsidc_projections` gives the correct map extent for NSIDC azimuthal projections._
+
+### Grid Methods
+
+An important feature of the `nsidc_projections` package is that it does not only provides CRS definitions for NSIDC CRS but also encapsulates grid definitions for the commonly used grids.
+
+The external boundaries of a grid are returned
+```
+EASEGrid2North25km.grid_bounds()
+```
+```
+[(-9000000.0, 9000000.0),
+ (9000000.0, 9000000.0),
+ (9000000.0, -9000000.0),
+ (-9000000.0, -9000000.0)]
+```
+
+`x` and `y` grid coordinates are returned
+```
+EASEGrid2North25km.get_coordinates()
+```
+```
+array([-9.02430900e+06, -8.99924147e+06, -8.97417395e+06, -8.94910642e+06,
+       -8.92403890e+06, -8.89897138e+06, -8.87390385e+06, -8.84883632e+06,
+       -8.82376880e+06, -8.79870127e+06, -8.77363375e+06, -8.74856622e+06,
+       <snip>
+         8562500.,  8587500.,  8612500.,  8637500.,  8662500.,  8687500.,
+         8712500.,  8737500.,  8762500.,  8787500.,  8812500.,  8837500.,
+         8862500.,  8887500.,  8912500.,  8937500.,  8962500.,  8987500.]),
+ array([ 8987500.,  8962500.,  8937500.,  8912500.,  8887500.,  8862500.,
+         8837500.,  8812500.,  8787500.,  8762500.,  8737500.,  8712500.,
+         8687500.,  8662500.,  8637500.,  8612500.,  8587500.,  8562500.,
+         8537500.,  8512500.,  8487500.,  8462500.,  8437500.,  8412500.,
+       <snip>
+       -8712500., -8737500., -8762500., -8787500., -8812500., -8837500.,
+       -8862500., -8887500., -8912500., -8937500., -8962500., -8987500.]))
+```
+
+
+
 
