@@ -32,6 +32,9 @@ keymap_globeparam = {
     'R': 'semimajor_axis',
     'a': 'semimajor_axis',
     'b': 'semiminor_axis',
+    'datum': 'datum',
+    'ellipse': 'ellipse',
+    'sphere': 'sphere',
     }
 
 
@@ -145,6 +148,7 @@ class Grid:
     def to_cartopy(self):
         return to_cartopy(self.crs)
 
+
     def grid_bounds(self, xy=False):
         grid_corners = [(0,0), (self.cols, 0), (self.cols, self.rows), (0, self.rows)]
         grid_corners_m = [self.geotransform() * corner for corner in grid_corners]
@@ -163,4 +167,15 @@ class Grid:
 
 
 EASEGridNorth25km = Grid(grid_info.EASEGridNorth25km)
+EASEGridSouth25km = Grid(grid_info.EASEGridSouth25km)
+EASEGridGlobal25km = Grid(grid_info.EASEGridGlobal25km)
+
+EASEGrid2North25km = Grid(grid_info.EASEGrid2North25km)
+EASEGrid2South25km = Grid(grid_info.EASEGrid2South25km)
+EASEGrid2Global25km = Grid(grid_info.EASEGrid2Global25km)
+
+AVHRR_EASEGridNorth25km = Grid(grid_info.AVHRR_EASEGridNorth25km)
+AVHRR_EASEGridSouth25km = Grid(grid_info.AVHRR_EASEGridSouth25km)
+
 SSMI_PolarStereoNorth25km = Grid(grid_info.SSMI_PolarStereoNorth25km)
+SSMI_PolarStereoSouth25km = Grid(grid_info.SSMI_PolarStereoSouth25km)
