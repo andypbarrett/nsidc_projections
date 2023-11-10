@@ -114,7 +114,7 @@ class Grid:
             0.,
             self.upper_left_x,
             0.,
-            -1. * self.cell_height,
+            self.cell_height,
             self.upper_left_y
             )
 
