@@ -1,6 +1,8 @@
 """Contains projection and grid constants"""
 from collections import namedtuple
 
+import numpy as np
+
 Grid = namedtuple(
     "Grid",
     [
@@ -36,36 +38,36 @@ POLAR_STEREO_NORTH_WGS84_EPSG = 3413
 POLAR_STEREO_SOUTH_WGS84_EPSG = 3976
 
 EASEGridNorth25km = Grid(
-    name="EASE-Grid North 25 km",
-    epsg=EASE_GRID_NORTH_EPSG,
-    cols=721,
-    rows=721,
-    cell_width=EASE_GRID25_WIDTH,
-    cell_height=EASE_GRID25_HEIGHT,
-    upper_left_x=-9036842.76,
-    upper_left_y=9036842.76
+    name ="EASE-Grid North 25 km",
+    epsg =EASE_GRID_NORTH_EPSG,
+    cols =721,
+    rows =721,
+    cell_width = EASE_GRID25_WIDTH,
+    cell_height = EASE_GRID25_HEIGHT,
+    upper_left_x = np.round(-1 * EASE_GRID25_WIDTH * (721/2), 6),
+    upper_left_y = np.round(-1 * EASE_GRID25_HEIGHT * (721/2), 6),
     )
 
 EASEGridSouth25km = Grid(
-    name="EASE-Grid South 25 km",
-    epsg=EASE_GRID_SOUTH_EPSG,
-    cols=721,
-    rows=721,
-    cell_width=EASE_GRID25_WIDTH,
-    cell_height=EASE_GRID25_HEIGHT,
-    upper_left_x=-9036842.76,
-    upper_left_y=9036842.76
+    name = "EASE-Grid South 25 km",
+    epsg = EASE_GRID_SOUTH_EPSG,
+    cols = 721,
+    rows = 721,
+    cell_width = EASE_GRID25_WIDTH,
+    cell_height = EASE_GRID25_HEIGHT,
+    upper_left_x = np.round(-1 * EASE_GRID25_WIDTH * (721/2), 6),
+    upper_left_y = np.round(-1 * EASE_GRID25_HEIGHT * (721/2), 6),
     )
 
 EASEGridGlobal25km = Grid(
-    name="EASE-Grid Global 25 km",
-    epsg=EASE_GRID_GLOBAL_EPSG,
-    cols=1383,
-    rows=586,
-    cell_width=EASE_GRID25_WIDTH,
-    cell_height=EASE_GRID25_HEIGHT,
-    upper_left_x=-17334193.54,
-    upper_left_y=7344784.83
+    name = "EASE-Grid Global 25 km",
+    epsg = EASE_GRID_GLOBAL_EPSG,
+    cols = 1383,
+    rows = 586,
+    cell_width = EASE_GRID25_WIDTH,
+    cell_height = EASE_GRID25_HEIGHT,
+    upper_left_x = np.round(-1 * EASE_GRID25_HEIGHT * (1383/2), 6),
+    upper_left_y = np.round(-1 * EASE_GRID25_HEIGHT * (586/2), 6),
     )
 
 EASEGrid2Global25km = Grid(
@@ -74,7 +76,7 @@ EASEGrid2Global25km = Grid(
     cols=1388,
     rows=584,
     cell_width=25025.26,
-    cell_height=25025.26,
+    cell_height=-25025.26,
     upper_left_x=-17367530.45,
     upper_left_y=7307375.92
     )
@@ -85,7 +87,7 @@ EASEGrid2North25km = Grid(
     cols=720,
     rows=720,
     cell_width=25000.,
-    cell_height=25000.,
+    cell_height=-25000.,
     upper_left_x=-9000000.0,
     upper_left_y=9000000.0
     )
@@ -96,7 +98,7 @@ EASEGrid2South25km = Grid(
     cols=720,
     rows=720,
     cell_width=25000.,
-    cell_height=25000.,
+    cell_height=-25000.,
     upper_left_x=-9000000.0,
     upper_left_y=9000000.0
     )
@@ -129,7 +131,7 @@ SSMI_PolarStereoNorth25km = Grid(
     cols=304,
     rows=448,
     cell_width=25000.,
-    cell_height=25000.,
+    cell_height=-25000.,
     upper_left_x=-3850000.,
     upper_left_y=5850000.
     )
@@ -140,7 +142,7 @@ SSMI_PolarStereoSouth25km = Grid(
     cols=316,
     rows=332,
     cell_width=25000.,
-    cell_height=25000.,
+    cell_height=-25000.,
     upper_left_x=-3950000.,
     upper_left_y=4350000.
     )

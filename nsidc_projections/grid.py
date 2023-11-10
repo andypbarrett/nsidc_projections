@@ -16,6 +16,7 @@ if not sys.warnoptions:
 
 # Need to add cylindrical projection
 keymap_projclass = {
+#    'cea': ccrs.LambertCylindrical,
     'laea': ccrs.LambertAzimuthalEqualArea,
     'stere': ccrs.Stereographic,
     }
@@ -32,6 +33,9 @@ keymap_globeparam = {
     'R': 'semimajor_axis',
     'a': 'semimajor_axis',
     'b': 'semiminor_axis',
+    'datum': 'datum',
+    'ellipse': 'ellipse',
+    'sphere': 'sphere',
     }
 
 
@@ -62,7 +66,7 @@ def get_cartopy_projclass(proj_name):
         cartopy_projclass = keymap_projclass[proj_name]
         return cartopy_projclass
     except KeyError:
-        print(f"{proj_name} is not available")
+        raise NotImplementedError(f"{proj_name} is not available")
 
 
 def to_cartopy(proj_crs):
@@ -111,7 +115,7 @@ class Grid:
             0.,
             self.upper_left_x,
             0.,
-            -1. * self.cell_height,
+            self.cell_height,
             self.upper_left_y
             )
 
@@ -127,9 +131,10 @@ class Grid:
 
 
     def get_gridcell_edges(self):
-        c = np.arange(0., self.cols+1, 1.)
-        r = np.arange(0., self.rows+1, 1.)
-        x, y = self.geotransform() * (c, r)
+        c = np.arange(0, self.cols+1, 1)
+        r = np.arange(0, self.rows+1, 1)
+        x, _ = self.geotransform() * (c, 0)
+        _, y = self.geotransform() * (0, r)
         return x, y
 
     
@@ -144,6 +149,7 @@ class Grid:
 
     def to_cartopy(self):
         return to_cartopy(self.crs)
+
 
     def grid_bounds(self, xy=False):
         grid_corners = [(0,0), (self.cols, 0), (self.cols, self.rows), (0, self.rows)]
@@ -163,4 +169,15 @@ class Grid:
 
 
 EASEGridNorth25km = Grid(grid_info.EASEGridNorth25km)
+EASEGridSouth25km = Grid(grid_info.EASEGridSouth25km)
+EASEGridGlobal25km = Grid(grid_info.EASEGridGlobal25km)
+
+EASEGrid2North25km = Grid(grid_info.EASEGrid2North25km)
+EASEGrid2South25km = Grid(grid_info.EASEGrid2South25km)
+EASEGrid2Global25km = Grid(grid_info.EASEGrid2Global25km)
+
+AVHRR_EASEGridNorth25km = Grid(grid_info.AVHRR_EASEGridNorth25km)
+AVHRR_EASEGridSouth25km = Grid(grid_info.AVHRR_EASEGridSouth25km)
+
 SSMI_PolarStereoNorth25km = Grid(grid_info.SSMI_PolarStereoNorth25km)
+SSMI_PolarStereoSouth25km = Grid(grid_info.SSMI_PolarStereoSouth25km)

@@ -1,6 +1,7 @@
 """Tests for parsing gpd and mpp files"""
 
 import pytest
+import numpy as np
 
 import nsidc_projections.mapx.parse_mapx as mapx
 
@@ -48,7 +49,12 @@ GPD_CASE = [
         'Grid Cells per Map Unit': 8.,
         'Grid Map Origin Column': 360.0,
         'Grid Map Origin Row': 360.0,
-        'Map Equatorial Radius': 6371228,
+        'Map Equatorial Radius': 6371228.,
+        'Map Origin X': -9036842.7625,
+        'Map Origin Y': 9036842.7625,
+        'Map Units per Cell': 25067.525,
+        'Cell Width': 25067.525,
+        'Cell Height': -25067.525,
     }
     ),
     ("Nh", {
@@ -59,10 +65,12 @@ GPD_CASE = [
         'Grid Cells per Map Unit': 16.,
         'Grid Map Origin Column': 720.0,
         'Grid Map Origin Row': 720.0,
-        'Map Equatorial Radius': 6371228,
-    #     'Map Origin X': -9030574.08,
-    #     'Map Origin Y': 9030574.08,
-    #     'Grid Map Units per Cell': 12533.76,
+        'Map Equatorial Radius': 6371228.,
+        'Map Origin X': -9030575.88125,
+        'Map Origin Y': 9030575.88125,
+        'Map Units per Cell': 12533.7625,
+        'Cell Width': 12533.7625,
+        'Cell Height': -12533.7625,
     },
     )
     ]
@@ -89,7 +97,7 @@ def test_make_mpp_path():
 def test_parse_gpd(case, expected):
     gpdname = case
     result = mapx.get_grid_definition(gpdname)
-    assert result == expected
+    assert pytest.approx(result) == expected
 
 
 @pytest.mark.parametrize(
@@ -110,26 +118,26 @@ def test_calc_grid_map_units_per_cell():
         "Scale km per map unit": 200.5402,
         'Grid Cells per Map Unit': 16.,
         }
-    expected = 12533.76
+    expected = 12533.7625
     result = mapx.calc_grid_map_units_per_cell(test)
     assert result == expected
 
 
 def test_calc_map_origin_x():
     test ={
-        "Grid Map Units per Cell": 12533.76,
+        "Map Units per Cell": 12533.7625,
         "Grid Map Origin Column": 720.0,
         }
-    expected = -9030574.08
+    expected = -9030575.88125
     result = mapx.calc_map_origin_x(test)
     assert expected == result
 
 
 def test_calc_map_origin_y():
     test ={
-        "Grid Map Units per Cell": 12533.76,
+        "Map Units per Cell": 12533.7625,
         "Grid Map Origin Row": 720.0,
         }
-    expected = 9030574.08
+    expected = 9030575.88125
     result = mapx.calc_map_origin_y(test)
     assert expected == result
