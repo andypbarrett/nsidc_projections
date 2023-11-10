@@ -131,7 +131,7 @@ SSMI_PolarStereoNorth25km = Grid(
     cols=304,
     rows=448,
     cell_width=25000.,
-    cell_height=25000.,
+    cell_height=-25000.,
     upper_left_x=-3850000.,
     upper_left_y=5850000.
     )
@@ -142,7 +142,7 @@ SSMI_PolarStereoSouth25km = Grid(
     cols=316,
     rows=332,
     cell_width=25000.,
-    cell_height=25000.,
+    cell_height=-25000.,
     upper_left_x=-3950000.,
     upper_left_y=4350000.
     )
