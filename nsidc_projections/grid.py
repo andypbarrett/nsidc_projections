@@ -130,9 +130,10 @@ class Grid:
 
 
     def get_gridcell_edges(self):
-        c = np.arange(0., self.cols+1, 1.)
-        r = np.arange(0., self.rows+1, 1.)
-        x, y = self.geotransform() * (c, r)
+        c = np.arange(0, self.cols+1, 1)
+        r = np.arange(0, self.rows+1, 1)
+        x, _ = self.geotransform() * (c, 0)
+        _, y = self.geotransform() * (0, r)
         return x, y
 
     
