@@ -1,6 +1,8 @@
 """Contains projection and grid constants"""
 from collections import namedtuple
 
+import numpy as np
+
 Grid = namedtuple(
     "Grid",
     [
@@ -36,36 +38,36 @@ POLAR_STEREO_NORTH_WGS84_EPSG = 3413
 POLAR_STEREO_SOUTH_WGS84_EPSG = 3976
 
 EASEGridNorth25km = Grid(
-    name="EASE-Grid North 25 km",
-    epsg=EASE_GRID_NORTH_EPSG,
-    cols=721,
-    rows=721,
-    cell_width=EASE_GRID25_WIDTH,
-    cell_height=EASE_GRID25_HEIGHT,
-    upper_left_x=-9036842.76,
-    upper_left_y=9036842.76
+    name ="EASE-Grid North 25 km",
+    epsg =EASE_GRID_NORTH_EPSG,
+    cols =721,
+    rows =721,
+    cell_width = EASE_GRID25_WIDTH,
+    cell_height = EASE_GRID25_HEIGHT,
+    upper_left_x = np.round(-1 * EASE_GRID25_WIDTH * (721/2), 6),
+    upper_left_y = np.round(-1 * EASE_GRID25_HEIGHT * (721/2), 6),
     )
 
 EASEGridSouth25km = Grid(
-    name="EASE-Grid South 25 km",
-    epsg=EASE_GRID_SOUTH_EPSG,
-    cols=721,
-    rows=721,
-    cell_width=EASE_GRID25_WIDTH,
-    cell_height=EASE_GRID25_HEIGHT,
-    upper_left_x=-9036842.76,
-    upper_left_y=9036842.76
+    name = "EASE-Grid South 25 km",
+    epsg = EASE_GRID_SOUTH_EPSG,
+    cols = 721,
+    rows = 721,
+    cell_width = EASE_GRID25_WIDTH,
+    cell_height = EASE_GRID25_HEIGHT,
+    upper_left_x = np.round(-1 * EASE_GRID25_WIDTH * (721/2), 6),
+    upper_left_y = np.round(-1 * EASE_GRID25_HEIGHT * (721/2), 6),
     )
 
 EASEGridGlobal25km = Grid(
-    name="EASE-Grid Global 25 km",
-    epsg=EASE_GRID_GLOBAL_EPSG,
-    cols=1383,
-    rows=586,
-    cell_width=EASE_GRID25_WIDTH,
-    cell_height=EASE_GRID25_HEIGHT,
-    upper_left_x=-17334193.54,
-    upper_left_y=7344784.83
+    name = "EASE-Grid Global 25 km",
+    epsg = EASE_GRID_GLOBAL_EPSG,
+    cols = 1383,
+    rows = 586,
+    cell_width = EASE_GRID25_WIDTH,
+    cell_height = EASE_GRID25_HEIGHT,
+    upper_left_x = np.round(-1 * EASE_GRID25_HEIGHT * (1383/2), 6),
+    upper_left_y = np.round(-1 * EASE_GRID25_HEIGHT * (586/2), 6),
     )
 
 EASEGrid2Global25km = Grid(
