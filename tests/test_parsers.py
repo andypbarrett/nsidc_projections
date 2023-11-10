@@ -118,26 +118,26 @@ def test_calc_grid_map_units_per_cell():
         "Scale km per map unit": 200.5402,
         'Grid Cells per Map Unit': 16.,
         }
-    expected = 12533.76
+    expected = 12533.7625
     result = mapx.calc_grid_map_units_per_cell(test)
     assert result == expected
 
 
 def test_calc_map_origin_x():
     test ={
-        "Grid Map Units per Cell": 12533.76,
+        "Map Units per Cell": 12533.7625,
         "Grid Map Origin Column": 720.0,
         }
-    expected = -9030574.08
+    expected = -9030575.88125
     result = mapx.calc_map_origin_x(test)
     assert expected == result
 
 
 def test_calc_map_origin_y():
     test ={
-        "Grid Map Units per Cell": 12533.76,
+        "Map Units per Cell": 12533.7625,
         "Grid Map Origin Row": 720.0,
         }
-    expected = 9030574.08
+    expected = 9030575.88125
     result = mapx.calc_map_origin_y(test)
     assert expected == result
