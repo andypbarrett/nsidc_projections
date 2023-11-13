@@ -181,3 +181,10 @@ AVHRR_EASEGridSouth25km = Grid(grid_info.AVHRR_EASEGridSouth25km)
 
 SSMI_PolarStereoNorth25km = Grid(grid_info.SSMI_PolarStereoNorth25km)
 SSMI_PolarStereoSouth25km = Grid(grid_info.SSMI_PolarStereoSouth25km)
+
+available_grids = [
+    'EASEGridNorth25km', 'EASEGridSouth25km', 'EASEGridGlobal25km',
+    'EASEGrid2North25km', 'EASEGrid2South25km', 'EASEGrid2Global25km',
+    'AVHRR_EASEGridNorth25km', 'AVHRR_EASEGridSouth25km',
+    'SSMI_PolarStereoNorth25km', 'SSMI_PolarStereoSouth25km',
+    ]
