@@ -16,5 +16,8 @@ dependencies:
  - rasterio
  - gdal
  - affine
+ - xarray
+ - rioxarray
+ - h5netcdf
  - pytest
  
