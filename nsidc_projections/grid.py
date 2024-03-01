@@ -69,9 +69,20 @@ def get_cartopy_projclass(proj_name):
         raise NotImplementedError(f"{proj_name} is not available")
 
 
+def create_proj_crs(crs):
+    """Trys to create a pyproj.CRS instance"""
+    try:
+        return CRS.from_wkt(crs.to_wkt())
+    except AttributeError as err:
+        raise TypeError("Unexpected CRS-type object.  Expects CRS to have to_wkt method")
+    
+        
 def to_cartopy(proj_crs):
     """Returns a cartopy crs"""
-    proj_dict = proj_crs.to_dict()
+    if not isinstance(proj_crs, CRS):
+        proj_dict = create_proj_crs(proj_crs).to_dict()
+    else:
+        proj_dict = proj_crs.to_dict()
     cartopy_projclass = get_cartopy_projclass(proj_dict['proj'])
     kw_proj = get_proj_params(proj_dict)
     kw_globe = get_globe_params(proj_dict)
