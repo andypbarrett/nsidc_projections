@@ -1,0 +1,9 @@
+---
+title: "Reference Guide"
+---
+
+## NetCDF CF-Conventions
+
+[NSIDC NetCDF Conventions](https://docs.google.com/document/d/1OygIU0T9_oviyKoJ-mxlMitzn8fjtkfr/edit)
+
+[CF-Conventions](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.9/cf-conventions.html#appendix-grid-mappings)
