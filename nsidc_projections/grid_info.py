@@ -37,6 +37,41 @@ POLAR_STEREO_SOUTH_EPSG = 3412
 POLAR_STEREO_NORTH_WGS84_EPSG = 3413
 POLAR_STEREO_SOUTH_WGS84_EPSG = 3976
 
+IMS_NORTH_POLAR_STEREO_WKT = """PROJCRS["unknown",
+    BASEGEOGCRS["unknown",
+        DATUM["unknown",
+            ELLIPSOID["unknown",6378137,291.505347349177,
+                LENGTHUNIT["metre",1,
+                    ID["EPSG",9001]]]],
+        PRIMEM["Greenwich",0,
+            ANGLEUNIT["degree",0.0174532925199433],
+            ID["EPSG",8901]]],
+    CONVERSION["unnamed",
+        METHOD["Polar Stereographic (variant B)",
+            ID["EPSG",9829]],
+        PARAMETER["Latitude of standard parallel",60,
+            ANGLEUNIT["degree",0.0174532925199433],
+            ID["EPSG",8832]],
+        PARAMETER["Longitude of origin",-80,
+            ANGLEUNIT["degree",0.0174532925199433],
+            ID["EPSG",8833]],
+        PARAMETER["False easting",0,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8806]],
+        PARAMETER["False northing",0,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8807]]],
+    CS[Cartesian,2],
+        AXIS["easting",south,
+            ORDER[1],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]],
+        AXIS["northing",south,
+            ORDER[2],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]]]
+"""
+
 EASEGridNorth25km = Grid(
     name ="EASE-Grid North 25 km",
     epsg =EASE_GRID_NORTH_EPSG,
@@ -144,6 +179,30 @@ SSMI_PolarStereoSouth25km = Grid(
     cell_width=25000.,
     cell_height=-25000.,
     upper_left_x=-3950000.,
-    upper_left_y=4350000.
+    upper_left_y=4350000.,
+    crs=None,
     )
 
+IMS4km = Grid(
+    name="IMS 4km",
+    epsg=None,
+    cols=6144,
+    rows=6144,
+    cell_width=4000.,
+    cell_height=4000.,
+    upper_left_x=-12288000.0,
+    upper_left_y=-12288000.0,
+    crs=IMS_NORTH_POLAR_STEREO_WKT,
+    )
+
+IMS1km = Grid(
+    name="IMS 1km",
+    epsg=None,
+    cols=24576,
+    rows=24576,
+    cell_width=1000.,
+    cell_height=1000.,
+    upper_left_x=-12288000.0,
+    upper_left_y=-12288000.0,
+    crs=IMS_NORTH_POLAR_STEREO_WKT,
+    )
