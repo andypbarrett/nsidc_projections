@@ -19,6 +19,8 @@ if not sys.warnoptions:
 
 # Need to add cylindrical projection
 keymap_projclass = {
+    'eqc': ccrs.PlateCarree,
+    'longlat': ccrs.PlateCarree,
 #    'cea': ccrs.LambertCylindrical,
     'laea': ccrs.LambertAzimuthalEqualArea,
     'stere': ccrs.Stereographic,
@@ -119,7 +121,10 @@ class Grid:
         self.upper_left_x = grid_tuple.upper_left_x
         self.upper_left_y = grid_tuple.upper_left_y
 
-        self.crs = CRS.from_epsg(grid_tuple.epsg)
+        if grid_tuple.epsg:
+            self.crs = CRS.from_user_input(grid_tuple.epsg)
+        elif grid_tuple.crs:
+            self.crs = CRS.from_user_input(grid_tuple.crs)
 
 
     def __str__(self):
@@ -208,6 +213,9 @@ AVHRR_EASEGridSouth25km = Grid(grid_info.AVHRR_EASEGridSouth25km)
 
 SSMI_PolarStereoNorth25km = Grid(grid_info.SSMI_PolarStereoNorth25km)
 SSMI_PolarStereoSouth25km = Grid(grid_info.SSMI_PolarStereoSouth25km)
+
+IMS4km = Grid(grid_info.IMS4km)
+IMS1km = Grid(grid_info.IMS1km)
 
 available_grids = [
     'EASEGridNorth25km', 'EASEGridSouth25km', 'EASEGridGlobal25km',
