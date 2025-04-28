@@ -1,9 +1,12 @@
 """Classes for NSIDC Grids"""
+from typing import Union
 import sys
 
 import numpy as np
 
 from pyproj import CRS, Transformer
+from pyproj.exceptions import CRSError
+
 from affine import Affine
 import cartopy.crs as ccrs
 
@@ -33,6 +36,7 @@ keymap_globeparam = {
     'R': 'semimajor_axis',
     'a': 'semimajor_axis',
     'b': 'semiminor_axis',
+    'rf': 'inverse_flattening',
     'datum': 'datum',
     'ellipse': 'ellipse',
     'sphere': 'sphere',
@@ -69,18 +73,30 @@ def get_cartopy_projclass(proj_name):
         raise NotImplementedError(f"{proj_name} is not available")
 
 
-def create_proj_crs(crs):
-    """Trys to create a pyproj.CRS instance"""
+def create_proj_crs(crs: str):
+    """Trys to create a pyproj.CRS instance
+
+    crs : can be a epsg string, 'EPSG:3414', an epsg code as an int 3414,
+          a proj4 string or a well-known-text string
+
+    Returns
+    -------
+    A proj CRS object
+    """
     try:
-        return CRS.from_wkt(crs.to_wkt())
-    except AttributeError as err:
+        return CRS.from_user_input(crs)
+    except CRSError as err:
         raise TypeError("Unexpected CRS-type object.  Expects CRS to have to_wkt method")
     
         
 def to_cartopy(proj_crs):
     """Returns a cartopy crs"""
     if not isinstance(proj_crs, CRS):
-        proj_dict = create_proj_crs(proj_crs).to_dict()
+        try:
+            proj_dict = create_proj_crs(proj_crs).to_dict()
+        except Exception as err:
+            print(err)
+            return None
     else:
         proj_dict = proj_crs.to_dict()
     cartopy_projclass = get_cartopy_projclass(proj_dict['proj'])
